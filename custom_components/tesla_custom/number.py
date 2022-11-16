@@ -165,3 +165,129 @@ class TeslaEnergyBackupReserve(TeslaEnergyEntity, NumberEntity):
     def icon(self):
         """Return icon for the backup reserve."""
         return icon_for_battery_level(battery_level=self.native_value)
+
+
+class TeslaCarScheduledDepartureTime(TeslaCarEntity, NumberEntity):
+    """Representation of a Tesla car charge limit number."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        car: TeslaCar,
+        coordinator: TeslaDataUpdateCoordinator,
+    ) -> None:
+        """Initialize charge limit entity."""
+        super().__init__(hass, car, coordinator)
+        self.type = "charge limit"
+        self._attr_icon = "mdi:ev-station"
+        self._attr_mode = NumberMode.AUTO
+        self._attr_native_step = 5
+
+    async def async_set_native_value(self, value: int) -> None:
+        """Update charge limit."""
+        await self._car.change_charge_limit(value)
+        await self.async_update_ha_state()
+
+    @property
+    def native_value(self) -> int:
+        """Return charge limit."""
+        return self._car.charge_limit_soc
+
+    @property
+    def native_min_value(self) -> int:
+        """Return min charge limit."""
+        return 0
+
+    @property
+    def native_max_value(self) -> int:
+        """Return max charge limit."""
+        return 1440
+
+    # @property
+    # def native_unit_of_measurement(self) -> str:
+    #     """Return percentage."""
+    #     return PERCENTAGE
+
+
+class TeslaCarScheduledChargeTime(TeslaCarEntity, NumberEntity):
+    """Representation of a Tesla car charge limit number."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        car: TeslaCar,
+        coordinator: TeslaDataUpdateCoordinator,
+    ) -> None:
+        """Initialize charge limit entity."""
+        super().__init__(hass, car, coordinator)
+        self.type = "charge limit"
+        self._attr_icon = "mdi:ev-station"
+        self._attr_mode = NumberMode.AUTO
+        self._attr_native_step = 1
+
+    async def async_set_native_value(self, value: int) -> None:
+        """Update charge limit."""
+        await self._car.change_charge_limit(value)
+        await self.async_update_ha_state()
+
+    @property
+    def native_value(self) -> int:
+        """Return charge limit."""
+        return self._car.charge_limit_soc
+
+    @property
+    def native_min_value(self) -> int:
+        """Return min charge limit."""
+        return 0
+
+    @property
+    def native_max_value(self) -> int:
+        """Return max charge limit."""
+        return 1440
+
+    # @property
+    # def native_unit_of_measurement(self) -> str:
+    #     """Return percentage."""
+    #     return PERCENTAGE
+
+
+class TeslaCarEndOffPeakMin(TeslaCarEntity, NumberEntity):
+    """Representation of a Tesla car end off peak time in minutes after."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        car: TeslaCar,
+        coordinator: TeslaDataUpdateCoordinator,
+    ) -> None:
+        """Initialize charge limit entity."""
+        super().__init__(hass, car, coordinator)
+        self.type = "charge limit"
+        self._attr_icon = "mdi:ev-station"
+        self._attr_mode = NumberMode.AUTO
+        self._attr_native_step = 1
+
+    async def async_set_native_value(self, value: int) -> None:
+        """Update charge limit."""
+        await self._car.change_charge_limit(value)
+        await self.async_update_ha_state()
+
+    @property
+    def native_value(self) -> int:
+        """Return charge limit."""
+        return self._car.charge_limit_soc
+
+    @property
+    def native_min_value(self) -> int:
+        """Return min charge limit."""
+        return 0
+
+    @property
+    def native_max_value(self) -> int:
+        """Return max charge limit."""
+        return 1440
+
+    # @property
+    # def native_unit_of_measurement(self) -> str:
+    #     """Return percentage."""
+    #     return PERCENTAGE

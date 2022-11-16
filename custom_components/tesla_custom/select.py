@@ -54,6 +54,18 @@ SEAT_ID_MAP = {
     "third row right": 7,
 }
 
+SCHEDULED_CHARGING_MODES = [
+    "Off",
+    "Scheduled Departure",
+    "Scheduled Charging",
+]
+
+SCHEDULING_OPTIONS = [
+    "Off",
+    "Weekdays",
+    "All week",
+]
+
 
 async def async_setup_entry(hass: HomeAssistant, config_entry, async_add_entities):
     """Set up the Tesla selects by config_entry."""
@@ -258,3 +270,130 @@ class TeslaEnergyOperationMode(TeslaEnergyEntity, SelectEntity):
             return OPERATION_MODE[1]
         if self._energysite.operation_mode == "backup":
             return OPERATION_MODE[2]
+
+
+class TeslaCarScheduledDeparturePrecondition(TeslaCarEntity, SelectEntity):
+    """Representation of a Tesla car scheduled depature precondition."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        car: TeslaCar,
+        coordinator: TeslaDataUpdateCoordinator,
+    ):
+        """Initialize scheduled departure preconditioning entity."""
+        super().__init__(hass, car, coordinator)
+        self.type = "scheduled departure precondition"
+        self._attr_options = SCHEDULING_OPTIONS
+        # self._attr_entity_category = EntityCategory.CONFIG
+        self._attr_icon = "mdi:calendar-plus"
+
+    async def async_select_option(self, option: str, **kwargs):
+        """Change the selected option."""
+        # Call set departure function?
+
+        # if option == "Scheduled Departure":
+        #     #Get vars, send command
+        # elif option == "Scheduled Charging":
+        #     #Get vars, send command
+        # else:
+        #     #Turn Off
+        #     await self._car.set_scheduled_charging(False, 420)
+        #     await self._car.set_scheduled_departure(False, 420)
+
+        await self.async_update_ha_state()
+
+    # @property
+    # def current_option(self):
+    #     """Return current scheduled departure preconditioning setting."""
+    #     if self._car.is_preconditioning_enabled:
+    #         if self._car.preconditioning_weekend_only:
+    #             return "Weekdays"
+    #         return "All Week"
+    #     return "Off"
+
+
+class TeslaCarScheduledDepartureOffPeak(TeslaCarEntity, SelectEntity):
+    """Representation of a Tesla car scheduled depature off peak."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        car: TeslaCar,
+        coordinator: TeslaDataUpdateCoordinator,
+    ):
+        """Initialize scheduled departure off peak entity."""
+        super().__init__(hass, car, coordinator)
+        self.type = "scheduled departure off peak"
+        self._attr_options = SCHEDULING_OPTIONS
+        # self._attr_entity_category = EntityCategory.CONFIG
+        self._attr_icon = "mdi:calendar-plus"
+
+    async def async_select_option(self, option: str, **kwargs):
+        """Change the selected option."""
+        # Call set departure function?
+
+        # if option == "Scheduled Departure":
+        #     #Get vars, send command
+        # elif option == "Scheduled Charging":
+        #     #Get vars, send command
+        # else:
+        #     #Turn Off
+        #     await self._car.set_scheduled_charging(False, 420)
+        #     await self._car.set_scheduled_departure(False, 420)
+
+        await self.async_update_ha_state()
+
+    # @property
+    # def current_option(self):
+    #     """Return current scheduled departure off peak setting."""
+    #     if self._car.is_off_peak_enabled:
+    #         if self._car.off_peak_weekend_only:
+    #             return "Weekdays"
+    #         return "All Week"
+    #     return "Off"
+
+
+class TeslaCarScheduledChargingMode(TeslaCarEntity, SelectEntity):
+    """Representation of a Tesla car scheduled charging mode."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        car: TeslaCar,
+        coordinator: TeslaDataUpdateCoordinator,
+    ):
+        """Initialize cabin overheat protection entity."""
+        super().__init__(hass, car, coordinator)
+        self.type = "scheduled charging mode"
+        self._attr_options = SCHEDULED_CHARGING_MODES
+        # self._attr_entity_category = EntityCategory.CONFIG
+        self._attr_icon = "mdi:calendar-plus"
+
+    async def async_select_option(self, option: str, **kwargs):
+        """Change the selected option."""
+        # Get states
+
+        if option == "Scheduled Departure":
+            _LOGGER.debug("Scheduled Departure")
+            # Get vars, send command
+        elif option == "Scheduled Charging":
+            _LOGGER.debug("Scheduled Charging")
+            # Get vars, send command
+        else:
+            # Turn Off
+            _LOGGER.debug("Off")
+
+            # await self._car.set_scheduled_charging(False, 420)
+            # await self._car.set_scheduled_departure(False, 420)
+
+        await self.async_update_ha_state()
+
+    @property
+    def current_option(self):
+        """Return current scheduled charging mode."""
+        if self._car.scheduled_charging_mode == "DepartBy":
+            return "Scheduled Departure"
+        elif elf._car.scheduled_charging_mode == "StartBy":
+            return "Scheduled Charging"
+        return self._car.scheduled_charging_mode
